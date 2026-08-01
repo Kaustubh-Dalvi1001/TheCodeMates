@@ -1,7 +1,31 @@
 import React from "react";
 import logo from "../assets/TCM_Logo.png";
+import { NavLink, useNavigate } from "react-router-dom";
+import { logoutUser } from "./api";
+import { useMutation } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { removeUser } from "../store/userSlice";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { mutate: logout } = useMutation({
+    mutationFn: logoutUser,
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success(data);
+      dispatch(removeUser());
+      navigate("/login");
+    },
+    onError: (error) => {
+      const backendErrorMessage = error.response.data.message;
+      console.error(`Error in logout: ${backendErrorMessage}`);
+      toast.error(backendErrorMessage);
+    },
+  });
+
   return (
     <div className="navbar bg-base-200 shadow-sm">
       <div className="navbar-start">
@@ -20,15 +44,16 @@ const NavBar = () => {
           <ul
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            onClick={() => document.activeElement.blur()}
           >
             <li>
-              <a>Homepage</a>
+              <NavLink to="/feed">Feed</NavLink>
             </li>
             <li>
-              <a>Portfolio</a>
+              <NavLink to="/profile">Profile</NavLink>
             </li>
             <li>
-              <a>About</a>
+              <button onClick={logout}>Logout</button>
             </li>
           </ul>
         </div>

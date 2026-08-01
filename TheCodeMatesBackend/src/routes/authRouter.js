@@ -60,28 +60,29 @@ authRouter.post("/userLogin", async (req, res) => {
         const token = dbUser.getJWT(); // offloaded the logic to the schema method.
 
         res.cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000 }); //cookie expires in 7days
-        res.send({
+        res.json({
           message: `Welcome ${dbUser.gender === "male" ? "Mr." : dbUser.gender === "female" ? "Ms." : ""} ${dbUser.userName}`,
         });
       } else {
-        res.status(401).send("Invalid Credentials!!");
+        res.status(401).json({ message: "Invalid Credentials!!" });
       }
     } else {
-      res.status(401).send("Invalid Credentials!!");
+      res.status(401).json({ message: "Invalid Credentials!!" });
     }
   } catch (error) {
     console.log("Error in Login: ", error);
-    res.send(error.message);
+    res.json({ message: `Error in Login: ${error.message}` });
   }
 });
 
 // logout
 authRouter.post("/userLogout", userAuth, (req, res) => {
+  const { userName } = req.user;
   try {
-    res.cookie("token", null, { maxAge: 0 }).send("User logged out successfully");
+    res.cookie("token", null, { maxAge: 0 }).json({ message: `${userName} logged out successfully` });
   } catch (error) {
     console.error("Error in logging out the user", error);
-    res.status(401).send("Error in logging out the user" + error.message);
+    res.status(401).json({ message: "Error in logging out the user" + error.message });
   }
 });
 

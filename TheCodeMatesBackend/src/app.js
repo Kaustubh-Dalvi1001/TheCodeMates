@@ -6,10 +6,18 @@ import { authRouter } from "./routes/authRouter.js";
 import { userProfileRouter } from "./routes/userProfileRouter.js";
 import { connectionReqRouter } from "./routes/connectionReqRouter.js";
 import { userRouter } from "./routes/userRouter.js";
+import cors from "cors";
 
 // Creating an express server.
 const app = express();
 
+// CORS
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 // Converts request body into JSON so that all RH can read it.
 app.use(express.json());
 // Parses cookies so that all the RH can read it.

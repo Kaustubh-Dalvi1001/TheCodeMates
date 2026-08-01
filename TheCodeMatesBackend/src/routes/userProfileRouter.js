@@ -11,10 +11,12 @@ export const userProfileRouter = express.Router();
 userProfileRouter.get("/userProfile", userAuth, async (req, res) => {
   try {
     const { user } = req;
-    res.send(user);
+    res.json({
+      message: user.userName,
+    });
   } catch (error) {
     console.error("Error in fetching the profile: ", error);
-    res.send("Error in fetching the profile: " + error.message);
+    res.status(401).send("Error in fetching the profile: " + error.message);
   }
 });
 
