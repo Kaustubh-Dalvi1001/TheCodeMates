@@ -11,8 +11,9 @@ export const userProfileRouter = express.Router();
 userProfileRouter.get("/userProfile", userAuth, async (req, res) => {
   try {
     const { user } = req;
+    const { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId } = user;
     res.json({
-      message: user.userName,
+      userProfile: { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId },
     });
   } catch (error) {
     console.error("Error in fetching the profile: ", error);
@@ -31,7 +32,17 @@ userProfileRouter.patch("/updateUserProfile", userAuth, async (req, res) => {
     const updatedUser = await UserModel.findByIdAndUpdate(_id, updatedData, {
       returnDocument: "after",
       runValidators: true,
-    });
+    }).select([
+      "_id",
+      "userName",
+      "firstName",
+      "lastName",
+      "age",
+      "gender",
+      "bio",
+      "Technical_skills",
+      "emailId",
+    ]);
 
     res.json({
       message: `${updatedUser.userName}, your profile updated successfully.`,
@@ -39,7 +50,7 @@ userProfileRouter.patch("/updateUserProfile", userAuth, async (req, res) => {
     });
   } catch (error) {
     console.error("Error in updating the user profile: ", error);
-    res.send("Error in updating the user profile: " + error.message);
+    res.status(400).json({ message: "Error in updating the user profile: " + error.message });
   }
 });
 

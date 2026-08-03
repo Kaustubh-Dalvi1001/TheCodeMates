@@ -26,8 +26,8 @@ const Login = () => {
   const { mutate: loginUserMutate } = useMutation({
     mutationFn: (userData) => loginUser(userData),
     onSuccess: (data) => {
-      console.log(data);
-      dispatch(addUser(data));
+      // console.log(data.loggedInUser);
+      dispatch(addUser(data.loggedInUser));
       toast.success(data.message);
       navigate("/feed");
     },
@@ -52,7 +52,7 @@ const Login = () => {
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
             <form action="#" onSubmit={handleSubmit(submitData)}>
-              <fieldset className="fieldset">
+              <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
                 <legend className="fieldset-legend">Login</legend>
                 <label className="label">Email ID</label>
                 <input

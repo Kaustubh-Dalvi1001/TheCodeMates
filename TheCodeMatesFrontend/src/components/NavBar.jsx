@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../assets/TCM_Logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 import { logoutUser } from "./api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../store/userSlice";
 import { toast } from "react-toastify";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 const NavBar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const { mutate: logout } = useMutation({
     mutationFn: logoutUser,
@@ -17,6 +18,7 @@ const NavBar = () => {
       console.log(data);
       toast.success(data);
       dispatch(removeUser());
+      queryClient.invalidateQueries(["loggedInUser"]);
       navigate("/login");
     },
     onError: (error) => {

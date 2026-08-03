@@ -34,17 +34,17 @@ const Feed = () => {
     dispatch(addFeed(feed?.data));
   }, [feed]);
 
-  console.log(storeUserFeed);
+  // console.log(storeUserFeed);
 
   return (
     <div>
       {storeUserFeed?.map((eachUser) => {
-        const { id, firstName, lastName, userName, gender, age, bio, Technical_skills } = eachUser;
+        const { _id, firstName, lastName, userName, gender, age, bio, Technical_skills } = eachUser;
         return (
-          <div className="flex justify-center items-center">
+          <div key={_id} className="flex justify-center items-center">
             <div className="card bg-base-200 w-96 shadow-lg">
               <div className="card-body">
-                <h2 className="card-title">{eachUser?.userName}</h2>
+                <h2 className="card-title">{userName}</h2>
                 <div>
                   {firstName} {lastName}
                 </div>
@@ -53,8 +53,8 @@ const Feed = () => {
                 </div>
                 <div>{bio}</div>
                 <div>
-                  {Technical_skills?.map((eachSkill) => (
-                    <span> {eachSkill} </span>
+                  {Technical_skills?.map((eachSkill, index) => (
+                    <span key={index}> {eachSkill} </span>
                   ))}
                 </div>
                 <div className="card-actions justify-end">

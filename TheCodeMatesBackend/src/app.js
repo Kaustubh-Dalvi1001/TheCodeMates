@@ -18,6 +18,7 @@ app.use(
     credentials: true,
   }),
 );
+
 // Converts request body into JSON so that all RH can read it.
 app.use(express.json());
 // Parses cookies so that all the RH can read it.

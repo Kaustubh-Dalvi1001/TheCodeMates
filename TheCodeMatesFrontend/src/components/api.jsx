@@ -20,6 +20,8 @@ export const fetchUser = async () => {
   try {
     const response = await api.get("/userProfile");
 
+    // console.log(response.data);
+
     return response.data;
   } catch (error) {
     console.error("Error in fetching user: ", error);
@@ -40,6 +42,15 @@ export const logoutUser = async () => {
 export const userFeed = async () => {
   try {
     const response = await api.get("/feed");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateUserProfile = async (userData) => {
+  try {
+    const response = await api.patch("/updateUserProfile", userData);
     return response.data;
   } catch (error) {
     throw error;
