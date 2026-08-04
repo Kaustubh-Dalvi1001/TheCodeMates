@@ -9,12 +9,13 @@ import { addUser } from "../store/userSlice";
 import { toast } from "react-toastify";
 import { useRef } from "react";
 
+const PUBLIC_ROUTES = ["/login", "/signUp"];
+
 const Body = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  const hasFetchedOnce = useRef(false);
-  const storeUserData = useSelector((store) => store.userReucer);
+  const dispatch = useDispatch();
+  const { status, profile } = useSelector((store) => store.userReucer);
 
   const {
     data: userData,
@@ -24,46 +25,34 @@ const Body = () => {
     queryKey: ["loggedInUser"],
     queryFn: fetchUser,
     retry: false,
-    enabled: !storeUserData && !hasFetchedOnce.current,
+    enabled: status === "idle",
   });
 
   useEffect(() => {
-    if (storeUserData) {
-      hasFetchedOnce.current = true;
-    }
-  }, [storeUserData]);
-
-  useEffect(() => {
-    if (userData || isError) {
-      hasFetchedOnce.current = true;
-    }
-  }, [userData, isError]);
-
-  useEffect(() => {
-    if (isError && !storeUserData) {
-      const status = userDataError?.response?.status;
+    if (isError) {
+      const httpStatus = userDataError?.response?.status;
       const backendErrorMessage = userDataError?.response?.data?.message;
-      if (status === 404) {
-        console.log(`Error is loading the user data: ${backendErrorMessage}`);
+      if (httpStatus === 401 || httpStatus === 404) {
+        dispatch(removeUser()); // status -> "unauthenticated", locks the gate shut
         toast.error(backendErrorMessage);
         navigate("/login");
       }
     }
-  }, [isError, userDataError, navigate]);
+  }, [isError, userDataError, navigate, dispatch]);
 
-  console.log(userData?.userProfile ?? storeUserData);
-
-  const dispatch = useDispatch();
+  // console.log(userData?.userProfile ?? storeUserData);
 
   useEffect(() => {
-    dispatch(addUser(userData?.userProfile));
+    if (userData?.userProfile) {
+      dispatch(addUser(userData.userProfile));
+    }
   }, [userData, dispatch]);
 
   useEffect(() => {
-    if (storeUserData && location.pathname === "/") {
+    if (status === "authenticated" && location.pathname === "/") {
       navigate("/feed");
     }
-  }, [storeUserData]);
+  }, [status, location.pathname, navigate]);
 
   return (
     <div className="flex flex-col h-screen">

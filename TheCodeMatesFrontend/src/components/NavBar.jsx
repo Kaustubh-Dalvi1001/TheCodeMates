@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { removeUser } from "../store/userSlice";
 import { toast } from "react-toastify";
+import { removeFeed } from "../store/feedSlice";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -18,11 +19,13 @@ const NavBar = () => {
       console.log(data);
       toast.success(data);
       dispatch(removeUser());
-      queryClient.invalidateQueries(["loggedInUser"]);
+      dispatch(removeFeed());
+      queryClient.cancelQueries();
+      queryClient.clear();
       navigate("/login");
     },
     onError: (error) => {
-      const backendErrorMessage = error.response.data.message;
+      const backendErrorMessage = error.response.data.message ?? "Logout failed";
       console.error(`Error in logout: ${backendErrorMessage}`);
       toast.error(backendErrorMessage);
     },
@@ -53,6 +56,9 @@ const NavBar = () => {
             </li>
             <li>
               <NavLink to="/profile">Profile</NavLink>
+            </li>
+            <li>
+              <NavLink to="/connections">My Connections</NavLink>
             </li>
             <li>
               <button onClick={logout}>Logout</button>

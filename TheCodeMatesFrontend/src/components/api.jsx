@@ -56,3 +56,12 @@ export const updateUserProfile = async (userData) => {
     throw error;
   }
 };
+
+export const fetchConnetions = async () => {
+  try {
+    const response = await api.get("/myConnections");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

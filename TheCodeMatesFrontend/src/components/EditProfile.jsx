@@ -8,11 +8,10 @@ import { addUser } from "../store/userSlice";
 import { toast } from "react-toastify";
 
 const EditProfile = () => {
-  const storeUserData = useSelector((store) => store.userReucer);
-  console.log(storeUserData);
+  const { profile } = useSelector((store) => store.userReucer);
+  console.log(profile);
 
-  const { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId } =
-    storeUserData ?? {};
+  const { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId } = profile ?? {};
 
   const [inputChar, setInpChar] = useState({
     firstNameChar: 0,
@@ -110,7 +109,7 @@ const EditProfile = () => {
     mutate(data);
   };
   return (
-    <div className="flex justify-center gap-5">
+    <div className="flex justify-center gap-5 mb-4">
       {/* usercard */}
       <div>
         <div className="card bg-base-200 w-96 shadow-lg m-4">
@@ -260,10 +259,10 @@ const EditProfile = () => {
             {/* bio */}
             <div className="relative col-span-2">
               <label className="label">Bio</label>
-              <input
+              <textarea
                 {...register("bio")}
                 type="text"
-                className="input pr-12 w-full"
+                className="textarea pr-12 w-full"
                 placeholder="Bio"
                 maxLength={200}
                 onChange={(e) => setInpChar((prev) => ({ ...prev, bioChar: e.target.value.length }))}
