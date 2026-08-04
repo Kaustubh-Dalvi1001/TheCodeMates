@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "./api";
 import { addUser } from "../store/userSlice";
 import { toast } from "react-toastify";
+import UserCard from "./UserCard";
 
 const EditProfile = () => {
   const { profile } = useSelector((store) => store.userReucer);
@@ -111,32 +112,8 @@ const EditProfile = () => {
   return (
     <div className="flex justify-center gap-5 mb-4">
       {/* usercard */}
-      <div>
-        <div className="card bg-base-200 w-96 shadow-lg m-4">
-          <div className="card-body">
-            <h2 className="card-title">{userName}</h2>
-            <div>
-              {firstName} {lastName}
-            </div>
-            <div>
-              {gender} {age}
-            </div>
-            <div>{bio}</div>
-            <div>
-              {Technical_skills?.map((eachSkill, index) => (
-                <span key={index}> {eachSkill} </span>
-              ))}
-            </div>
-            {/* <div className="card-actions justify-end">
-              <button className="btn btn-soft">
-                <UserX className="w-4 h-4" /> Ignore
-              </button>
-              <button className="btn btn-secondary">
-                <UserPlus className="w-4 h-4" /> Connect
-              </button>
-            </div> */}
-          </div>
-        </div>
+      <div className="mt-4">
+        <UserCard user={profile} page="edit"/>
       </div>
 
       {/* edit user card */}

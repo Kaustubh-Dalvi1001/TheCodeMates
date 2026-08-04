@@ -33,7 +33,7 @@ const Body = () => {
       const httpStatus = userDataError?.response?.status;
       const backendErrorMessage = userDataError?.response?.data?.message;
       if (httpStatus === 401 || httpStatus === 404) {
-        dispatch(removeUser()); // status -> "unauthenticated", locks the gate shut
+        dispatch(removeUser());
         toast.error(backendErrorMessage);
         navigate("/login");
       }

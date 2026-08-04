@@ -35,6 +35,8 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
 
+    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
+
     const connectionsArr = await ConnectionRequestsModel.find({
       $or: [
         {
@@ -46,15 +48,20 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
       ],
       status: "accepted",
     })
-      .populate("senderId", "userName")
-      .populate("receiverId", "userName");
+      .populate("senderId", userSafeData)
+      .populate("receiverId", userSafeData);
 
     if (connectionsArr.length === 0) {
-      return res.send("You have no connection.");
+      return res.json({ message: "You have no connection.", data: null });
     }
 
-    const myConnections = connectionsArr.map((eachUser) =>
-      eachUser.senderId._id.equals(loggedInUser._id) ? eachUser.receiverId : eachUser.senderId,
+    // console.log(connectionsArr);
+
+    const myConnections = connectionsArr.map((eachConnection) =>
+      // Because you are populating senderId becomes an object whith the user values. Its not just a normal _id even if the name suggests so.
+      eachConnection.senderId._id.equals(loggedInUser._id)
+        ? eachConnection.receiverId
+        : eachConnection.senderId,
     );
 
     res.json({

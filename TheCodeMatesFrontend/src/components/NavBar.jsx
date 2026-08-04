@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { removeUser } from "../store/userSlice";
 import { toast } from "react-toastify";
 import { removeFeed } from "../store/feedSlice";
+import { removeConnections } from "../store/connectionSlice";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const NavBar = () => {
       toast.success(data);
       dispatch(removeUser());
       dispatch(removeFeed());
+      dispatch(removeConnections());
       queryClient.cancelQueries();
       queryClient.clear();
       navigate("/login");
