@@ -65,3 +65,12 @@ export const fetchConnetions = async () => {
     throw error;
   }
 };
+
+export const fetchReceivedConnections = async () => {
+  try {
+    const response = await api.get("/receivedConnectionRequest");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

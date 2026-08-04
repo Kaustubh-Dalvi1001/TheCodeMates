@@ -9,8 +9,6 @@ import { UsersRound } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const Connections = () => {
-  const [connectionCompErr, setConnectionCompErr] = useState(null);
-
   const dispatch = useDispatch();
 
   const storeConnections = useSelector((store) => store?.connectionReducer);

@@ -1,8 +1,8 @@
-import { UserPlus, UserX } from "lucide-react";
+import { UserPlus, UserX, CircleCheck, CircleX } from "lucide-react";
 import React from "react";
 
 const UserCard = ({ user, page = "feed" }) => {
-  const { firstName, lastName, userName, gender, age, bio, Technical_skills } = user;
+  const { firstName, lastName, userName, gender, age, bio, Technical_skills } = user ?? {};
   return (
     <div className="card bg-base-200 w-96 shadow-lg">
       <div className="card-body">
@@ -22,15 +22,26 @@ const UserCard = ({ user, page = "feed" }) => {
         {page === "feed" ? (
           <div className="card-actions justify-end">
             <button className="btn btn-soft btn-sm">
-              <UserX className="w-4 h-4" /> Ignore
+              Ignore <UserX className="w-4 h-4" />
             </button>
             <button className="btn btn-secondary btn-sm">
-              <UserPlus className="w-4 h-4" /> Connect
+              Connect <UserPlus className="w-4 h-4" />
             </button>
           </div>
         ) : page === "connections" ? (
           <div className="card-actions justify-end">
-            <button className="btn btn-soft btn-sm"> Remove Connection </button>
+            <button className="btn btn-soft btn-sm">
+              Remove Connection <UserX className="w-4 h-4" />
+            </button>
+          </div>
+        ) : page === "receivedConnections" ? (
+          <div className="card-actions justify-end">
+            <button className="btn btn-soft btn-sm">
+              Reject <CircleX className="w-4 h-4" />
+            </button>
+            <button className="btn btn-info btn-sm">
+              Accept <CircleCheck className="w-4 h-4" />
+            </button>
           </div>
         ) : (
           ""

@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import appstore from "./store/appStore";
 import { ToastContainer } from "react-toastify";
 import Connections from "./components/Connections";
+import ReceivedConnections from "./components/ReceivedConnections";
 
 function App() {
   const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ function App() {
                 <Route path="/feed" element={<Feed />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/connections" element={<Connections />} />
+                <Route path="/receivedConnections" element={<ReceivedConnections />} />
               </Route>
               <Route path="/login" element={<Login />} />
             </Routes>

@@ -9,19 +9,19 @@ export const userRouter = express.Router();
 userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
+    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
     const receivedConnectionRequest = await ConnectionRequestsModel.find({
       receiverId: loggedInUser._id,
       status: "interested",
-    }).populate("senderId", "userName");
+    })
+      .populate("senderId", userSafeData)
+      .select("_id");
 
     if (receivedConnectionRequest.length === 0) {
-      return res.send("No new connection request received.");
+      return res.json({ message: "No new connection request received.", data: null });
     }
 
-    const userNames = receivedConnectionRequest.map((eachRequest) => eachRequest.senderId.userName);
-
     res.json({
-      message: `${userNames} has sent you a request.`,
       data: receivedConnectionRequest,
     });
   } catch (error) {
@@ -48,6 +48,7 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
       ],
       status: "accepted",
     })
+      .select("_id")
       .populate("senderId", userSafeData)
       .populate("receiverId", userSafeData);
 
@@ -57,12 +58,17 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
 
     // console.log(connectionsArr);
 
-    const myConnections = connectionsArr.map((eachConnection) =>
+    const myConnections = connectionsArr.map((eachConnection) => {
       // Because you are populating senderId becomes an object whith the user values. Its not just a normal _id even if the name suggests so.
-      eachConnection.senderId._id.equals(loggedInUser._id)
+      const otherUser = eachConnection.senderId._id.equals(loggedInUser._id)
         ? eachConnection.receiverId
-        : eachConnection.senderId,
-    );
+        : eachConnection.senderId;
+
+      return {
+        connectionId: eachConnection._id,
+        ...otherUser.toObject(),
+      };
+    });
 
     res.json({
       message: `You have ${connectionsArr.length} connection${connectionsArr.length > 1 ? "s" : ""}.`,

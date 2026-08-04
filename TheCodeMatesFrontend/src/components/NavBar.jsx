@@ -8,6 +8,7 @@ import { removeUser } from "../store/userSlice";
 import { toast } from "react-toastify";
 import { removeFeed } from "../store/feedSlice";
 import { removeConnections } from "../store/connectionSlice";
+import { removeReceivedRequests } from "../store/receivedRequestSlice";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const NavBar = () => {
       dispatch(removeUser());
       dispatch(removeFeed());
       dispatch(removeConnections());
+      dispatch(removeReceivedRequests());
       queryClient.cancelQueries();
       queryClient.clear();
       navigate("/login");
@@ -63,15 +65,18 @@ const NavBar = () => {
               <NavLink to="/connections">My Connections</NavLink>
             </li>
             <li>
+              <NavLink to="/receivedConnections">Received Connections</NavLink>
+            </li>
+            <li>
               <button onClick={logout}>Logout</button>
             </li>
           </ul>
         </div>
       </div>
       <div className="navbar-center">
-        <a className="btn btn-ghost text-xl">
+        <NavLink to="/feed" className="btn btn-ghost text-xl">
           The Code Mates <img src={logo} alt="Logo" className="w-[10%]" />
-        </a>
+        </NavLink>
       </div>
       <div className="navbar-end">
         <button className="btn btn-ghost btn-circle">
