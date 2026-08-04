@@ -74,3 +74,14 @@ export const fetchReceivedConnections = async () => {
     throw error;
   }
 };
+
+export const reviewRequest = async (reqReviewData) => {
+  const { reqStatus, reqId } = reqReviewData;
+
+  try {
+    const response = await api.post(`/request/review/${reqStatus}/${reqId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

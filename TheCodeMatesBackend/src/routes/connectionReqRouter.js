@@ -82,7 +82,7 @@ connectionReqRouter.post("/request/review/:status/:requestId", userAuth, async (
     const updatedRequest = await requestObj.save();
     // When you fetch a document with findOne(), Mongoose returns a document instance that already knows its _id exists in the DB and internally marks itself as not new (isNew: false). Calling .save() on it checks that flag — since it's not new, Mongoose runs an update matching that existing _id, sending only the fields you changed. If instead you'd created the document with new Model({...}), isNew would be true, and .save() would run an insert instead. So .save() isn't inherently "create" or "update" — it decides based on whether the document came from the DB (update) or was freshly constructed (insert).
 
-    res.send({
+    res.json({
       message: `Connection request ${updatedRequest.status}`,
       updatedRequest,
     });

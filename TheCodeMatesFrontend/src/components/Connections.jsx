@@ -61,7 +61,7 @@ const Connections = () => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="flex flex-wrap">
           {storeConnections?.data?.map((eachConnection) => {
             return (
               <div key={eachConnection._id} className="p-4">

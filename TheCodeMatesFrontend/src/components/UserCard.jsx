@@ -1,7 +1,7 @@
 import { UserPlus, UserX, CircleCheck, CircleX } from "lucide-react";
 import React from "react";
 
-const UserCard = ({ user, page = "feed" }) => {
+const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest }) => {
   const { firstName, lastName, userName, gender, age, bio, Technical_skills } = user ?? {};
   return (
     <div className="card bg-base-200 w-96 shadow-lg">
@@ -36,10 +36,18 @@ const UserCard = ({ user, page = "feed" }) => {
           </div>
         ) : page === "receivedConnections" ? (
           <div className="card-actions justify-end">
-            <button className="btn btn-soft btn-sm">
+            <button
+              onClick={() => handleReviewRequest({ reqStatus: "rejected", reqId: connectionId })}
+              className="btn btn-soft btn-sm"
+            >
               Reject <CircleX className="w-4 h-4" />
             </button>
-            <button className="btn btn-info btn-sm">
+            <button
+              onClick={() => {
+                handleReviewRequest({ reqStatus: "accepted", reqId: connectionId });
+              }}
+              className="btn btn-info btn-sm"
+            >
               Accept <CircleCheck className="w-4 h-4" />
             </button>
           </div>
