@@ -9,8 +9,10 @@ export const ValidateUpdateUserApi = (reqBody) => {
     "password",
     "age",
     "gender",
-    "Technical_skills",
     "bio",
+    "Technical_skills",
+    "otherSkills",
+    "hobbies",
   ];
 
   const isWrongParam = Object.keys(reqBody).filter((eachKey) => !acceptedFields.includes(eachKey));
@@ -20,7 +22,18 @@ export const ValidateUpdateUserApi = (reqBody) => {
   }
 
   // Validating reqBody
-  const { firstName, lastName, userName, password, age, gender, Technical_skills, bio } = reqBody;
+  const {
+    firstName,
+    lastName,
+    userName,
+    password,
+    age,
+    gender,
+    bio,
+    Technical_skills,
+    otherSkills,
+    hobbies,
+  } = reqBody;
 
   if (firstName?.length > 50) {
     throw new Error("First Name cannot be more than 50 characters.");
@@ -38,15 +51,23 @@ export const ValidateUpdateUserApi = (reqBody) => {
     throw new Error("Age cannot be less than 10 years or more than 100 years.");
   }
 
-  if (Technical_skills && Technical_skills?.length > 50) {
-    throw new Error("Technical skills cannot be more than 20.");
-  }
-
   if (bio?.length > 200) {
     throw new Error("Bio cannot be more than 200 characters.");
   }
 
   if (gender && !["male", "female", "others"].includes(gender)) {
     throw new Error("Gender can only be male, female or others.");
+  }
+
+  if (Technical_skills && Technical_skills?.length > 20) {
+    throw new Error("Technical skills cannot be more than 20.");
+  }
+
+  if (otherSkills?.length > 20) {
+    throw new Error("Other skills cannot be more than 20.");
+  }
+
+  if (hobbies?.length > 20) {
+    throw new Error("Hobbies cannot be more than 20.");
   }
 };

@@ -76,7 +76,23 @@ const userSchema = new Schema(
       type: [String],
       validate(value) {
         if (value.length > 20) {
-          throw new Error("Only 20 skills are allowed!!");
+          throw new Error("Only 20 skills are allowed.");
+        }
+      },
+    },
+    otherSkills: {
+      type: [String],
+      validate: (value) => {
+        if (value.length > 20) {
+          throw new Error("Only 20 other skills are allowed.");
+        }
+      },
+    },
+    hobbies: {
+      type: [String],
+      validate: (value) => {
+        if (value.length > 20) {
+          throw new Error("Only 20 hobbies are allowed.");
         }
       },
     },

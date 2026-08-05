@@ -10,7 +10,17 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
 
-    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
+    const userSafeData = [
+      "firstName",
+      "lastName",
+      "userName",
+      "age",
+      "gender",
+      "bio",
+      "Technical_skills",
+      "otherSkills",
+      "hobbies",
+    ];
 
     const connectionsArr = await ConnectionRequestsModel.find({
       $or: [
@@ -59,7 +69,17 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
 userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
-    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
+    const userSafeData = [
+      "firstName",
+      "lastName",
+      "userName",
+      "age",
+      "gender",
+      "bio",
+      "Technical_skills",
+      "otherSkills",
+      "hobbies",
+    ];
     const receivedConnectionRequest = await ConnectionRequestsModel.find({
       receiverId: loggedInUser._id,
       status: "interested",
@@ -84,7 +104,17 @@ userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
 userRouter.get("/getSentConnectionRequests", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
-    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
+    const userSafeData = [
+      "firstName",
+      "lastName",
+      "userName",
+      "age",
+      "gender",
+      "bio",
+      "Technical_skills",
+      "otherSkills",
+      "hobbies",
+    ];
 
     const sentConnectionRequests = await ConnectionRequestsModel.find({
       senderId: loggedInUser._id,
@@ -133,7 +163,17 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       eachDocument.senderId.equals(loggedInUser._id) ? eachDocument.receiverId : eachDocument.senderId,
     );
 
-    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
+    const userSafeData = [
+      "firstName",
+      "lastName",
+      "userName",
+      "age",
+      "gender",
+      "bio",
+      "Technical_skills",
+      "otherSkills",
+      "hobbies",
+    ];
 
     const allUsers = await UserModel.find({
       _id: {

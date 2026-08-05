@@ -59,12 +59,36 @@ authRouter.post("/userLogin", async (req, res) => {
       if (dbUser && isPasswordValid) {
         const token = dbUser.getJWT(); // offloaded the logic to the schema method.
 
-        const { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId } = dbUser;
+        const {
+          _id,
+          userName,
+          firstName,
+          lastName,
+          age,
+          gender,
+          bio,
+          emailId,
+          Technical_skills,
+          otherSkills,
+          hobbies,
+        } = dbUser;
 
         res.cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000 }); //cookie expires in 7days
         res.json({
           message: `Welcome ${gender === "male" ? "Mr." : gender === "female" ? "Ms." : ""} ${userName}`,
-          loggedInUser: { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId },
+          loggedInUser: {
+            _id,
+            userName,
+            firstName,
+            lastName,
+            age,
+            gender,
+            bio,
+            emailId,
+            Technical_skills,
+            otherSkills,
+            hobbies,
+          },
         });
       } else {
         res.status(401).json({ message: "Invalid Credentials!!" });

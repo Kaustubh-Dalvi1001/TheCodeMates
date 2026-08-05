@@ -11,9 +11,33 @@ export const userProfileRouter = express.Router();
 userProfileRouter.get("/userProfile", userAuth, async (req, res) => {
   try {
     const { user } = req;
-    const { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId } = user;
+    const {
+      _id,
+      userName,
+      firstName,
+      lastName,
+      age,
+      gender,
+      bio,
+      emailId,
+      Technical_skills,
+      otherSkills,
+      hobbies,
+    } = user;
     res.json({
-      userProfile: { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId },
+      userProfile: {
+        _id,
+        userName,
+        firstName,
+        lastName,
+        age,
+        gender,
+        bio,
+        emailId,
+        Technical_skills,
+        otherSkills,
+        hobbies,
+      },
     });
   } catch (error) {
     console.error("Error in fetching the profile: ", error);
@@ -40,8 +64,10 @@ userProfileRouter.patch("/updateUserProfile", userAuth, async (req, res) => {
       "age",
       "gender",
       "bio",
-      "Technical_skills",
       "emailId",
+      "Technical_skills",
+      "otherSkills",
+      "hobbies",
     ]);
 
     res.json({

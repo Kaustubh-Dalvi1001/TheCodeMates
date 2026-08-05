@@ -12,7 +12,19 @@ const EditProfile = () => {
   const { profile } = useSelector((store) => store.userReucer);
   console.log(profile);
 
-  const { _id, userName, firstName, lastName, age, gender, bio, Technical_skills, emailId } = profile ?? {};
+  const {
+    _id,
+    userName,
+    firstName,
+    lastName,
+    age,
+    gender,
+    bio,
+    emailId,
+    Technical_skills,
+    otherSkills,
+    hobbies,
+  } = profile ?? {};
 
   const [inputChar, setInpChar] = useState({
     firstNameChar: 0,
@@ -20,6 +32,8 @@ const EditProfile = () => {
     userNameChar: 0,
     bioChar: 0,
     skillChar: 0,
+    otherSkillChar: 0,
+    hobbiesChar: 0,
   });
 
   const queryClient = useQueryClient();
@@ -80,6 +94,77 @@ const EditProfile = () => {
 
   useEffect(() => {
     register("Technical_skills");
+  }, [register]);
+
+  // other skills
+  const otherSkillsArr = watch("otherSkills") || [];
+
+  useEffect(() => {
+    setValue("otherSkills", otherSkills);
+  }, [otherSkills]);
+
+  const handleOtherSkillsInput = (e) => {
+    const value = e.target.value.trim();
+    if ((e.key === "Enter" || e.key === ",") && value) {
+      e.preventDefault();
+
+      if (otherSkillsArr.length >= 20) return;
+      if (otherSkillsArr.includes(value)) {
+        e.target.value = "";
+        return;
+      }
+
+      setValue("otherSkills", [...otherSkillsArr, value], { shouldValidate: true });
+      setInpChar((prev) => ({ ...prev, otherSkillChar: 0 }));
+      e.target.value = "";
+    }
+  };
+
+  const handleRemoveOtherSkill = (index) => {
+    setValue(
+      "otherSkills",
+      otherSkillsArr.filter((_, i) => i !== index),
+      { shouldValidate: true },
+    );
+  };
+
+  useEffect(() => {
+    register("otherSkills");
+  }, [register]);
+
+  // Hobbies
+  const hobbiesArr = watch("hobbies") || [];
+
+  useEffect(() => {
+    setValue("hobbies", hobbies);
+  }, [hobbies]);
+
+  const handleHobbiesInput = (e) => {
+    const hobbie = e.target.value.trim();
+    if ((e.key === "Enter" || e.key === ",") && hobbie) {
+      e.preventDefault();
+
+      if (hobbiesArr.length > 20) return;
+      if (hobbiesArr.includes(hobbie)) {
+        e.target.value = "";
+        return;
+      }
+      setValue("hobbies", [...hobbiesArr, hobbie], { shouldValidate: true });
+      setInpChar((prev) => ({ ...prev, hobbiesChar: 0 }));
+      e.target.value = "";
+    }
+  };
+
+  const handleRemoveHobbie = (index) => {
+    setValue(
+      "hobbies",
+      hobbiesArr.filter((_, i) => i !== index),
+      { shouldValidate: true },
+    );
+  };
+
+  useEffect(() => {
+    register("hobbies");
   }, [register]);
 
   // update profile
@@ -216,9 +301,7 @@ const EditProfile = () => {
 
             {/* technical skills */}
             <div className="col-span-2 relative">
-              <label className="label">
-                Technical Skills
-              </label>
+              <label className="label">Technical Skills</label>
               <input
                 type="text"
                 className="input w-full pr-13"
@@ -244,8 +327,87 @@ const EditProfile = () => {
                 </div>
               )}
 
-              <p> {skills.length}/20 skills added </p>
+              <p>
+                {skills.length}/20 skill{skills.length > 1 ? "s" : ""} added
+              </p>
               {errors.Technical_skills && <p className="text-red-400"> {errors.Technical_skills.message} </p>}
+            </div>
+
+            {/* other skills */}
+            <div className="col-span-2 relative">
+              <label className="label"> Other Skills </label>
+              <input
+                type="text"
+                className="input w-full pr-13"
+                placeholder="Type a skill and press enter (max 20)"
+                maxLength={50}
+                onKeyDown={handleOtherSkillsInput}
+                disabled={otherSkillsArr?.length >= 20}
+                onChange={(e) => setInpChar((prev) => ({ ...prev, otherSkillChar: e.target.value.length }))}
+              />
+
+              {inputChar.otherSkillChar > 0 && (
+                <span className={inputCharStyle}> {inputChar.otherSkillChar}/50 </span>
+              )}
+
+              {otherSkillsArr?.length > 0 && (
+                <div className="flex flex-wrap gap-2 my-2">
+                  {otherSkillsArr?.map((eachOtherSkill, i) => {
+                    return (
+                      <span key={i} className="badge badge-soft badge-primary">
+                        {eachOtherSkill}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveOtherSkill(i)}
+                          className="cursor-pointer"
+                        >
+                          x
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+
+              <p>
+                {otherSkillsArr.length}/20 skill{otherSkillsArr.length > 1 ? "s" : ""} added
+              </p>
+              {errors.otherSkills && <p className="text-red-400"> {errors.otherSkills.message} </p>}
+            </div>
+
+            {/* hobbies */}
+            <div className="col-span-2 relative">
+              <label className="label"> Hobbies </label>
+              <input
+                type="text"
+                className="input w-full pr-13"
+                placeholder="Type a hoobie and press enter (max 20)"
+                onKeyDown={handleHobbiesInput}
+                maxLength={50}
+                onChange={(e) => setInpChar((prev) => ({ ...prev, hobbiesChar: e.target.value.length }))}
+                disabled={hobbiesArr.length >= 20}
+              />
+              {inputChar.hobbiesChar > 0 && (
+                <span className={inputCharStyle}> {inputChar.hobbiesChar}/50 </span>
+              )}
+
+              {hobbiesArr.length > 0 && (
+                <div className="flex flex-wrap gap-2 my-2">
+                  {hobbiesArr.map((eachHobbie, i) => (
+                    <span key={i} className="badge badge-soft badge-primary">
+                      {eachHobbie}
+                      <button type="button" onClick={() => handleRemoveHobbie(i)} className="cursor-pointer">
+                        x
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <p>
+                {hobbiesArr.length}/20 hobbie{hobbiesArr.length > 1 ? "s" : ""} added
+              </p>
+              {errors.hobbies && <p className="text-red-400"> {errors.hobbies.message} </p>}
             </div>
           </div>
 

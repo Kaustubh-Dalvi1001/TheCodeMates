@@ -2,7 +2,8 @@ import { UserPlus, UserX, CircleCheck, CircleX } from "lucide-react";
 import React from "react";
 
 const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, connectionReqMutate }) => {
-  const { _id, firstName, lastName, userName, gender, age, bio, Technical_skills } = user ?? {};
+  const { _id, firstName, lastName, userName, gender, age, bio, Technical_skills, otherSkills, hobbies } =
+    user ?? {};
   return (
     <div className="card bg-base-200 w-96 shadow-lg">
       <div className="card-body">
@@ -14,10 +15,10 @@ const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, conn
           {gender} {age}
         </div>
         <div>{bio}</div>
+        <div>{Technical_skills?.join(", ")}</div>
+        <div>{otherSkills?.join(", ")}</div>
         <div>
-          {Technical_skills?.map((eachSkill, index) => (
-            <span key={index}> {eachSkill} </span>
-          ))}
+          <span> {hobbies?.join(", ")} </span>
         </div>
         {page === "feed" ? (
           <div className="card-actions justify-end">
