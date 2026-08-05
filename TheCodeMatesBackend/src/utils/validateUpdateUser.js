@@ -25,9 +25,9 @@ export const ValidateUpdateUserApi = (reqBody) => {
   if (firstName?.length === 0) {
     throw new Error("First Name's length cannot be 0.");
   }
-  if (lastName?.length === 0) {
-    throw new Error("Last Name's length cannot be 0.");
-  }
+  // if (lastName?.length === 0) {
+  //   throw new Error("Last Name's length cannot be 0.");
+  // }
   if (userName?.length === 0) {
     throw new Error("User Name's length cannot be 0.");
   }

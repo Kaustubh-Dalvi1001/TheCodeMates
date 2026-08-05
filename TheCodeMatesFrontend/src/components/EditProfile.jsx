@@ -113,7 +113,7 @@ const EditProfile = () => {
     <div className="flex justify-center gap-5 mb-4">
       {/* usercard */}
       <div className="mt-4">
-        <UserCard user={profile} page="edit"/>
+        <UserCard user={profile} page="edit" />
       </div>
 
       {/* edit user card */}
@@ -156,13 +156,9 @@ const EditProfile = () => {
 
             {/* last name */}
             <div className="relative">
-              <label className="label">
-                Last Name <span className="text-red-300">*</span>
-              </label>
+              <label className="label">Last Name</label>
               <input
-                {...register("lastName", {
-                  required: { value: true, message: "Last Name is required." },
-                })}
+                {...register("lastName")}
                 type="text"
                 className="input pr-10"
                 placeholder="Last Name"

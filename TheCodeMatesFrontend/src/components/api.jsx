@@ -75,6 +75,15 @@ export const fetchReceivedConnections = async () => {
   }
 };
 
+export const fetchSentConnections = async () => {
+  try {
+    const response = await api.get("/getSentConnectionRequests");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const reviewRequest = async (reqReviewData) => {
   const { reqStatus, reqId } = reqReviewData;
 

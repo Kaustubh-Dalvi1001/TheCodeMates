@@ -5,31 +5,6 @@ import { UserModel } from "../models/userSchema.js";
 
 export const userRouter = express.Router();
 
-// received connection requests
-userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
-  try {
-    const loggedInUser = req.user;
-    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
-    const receivedConnectionRequest = await ConnectionRequestsModel.find({
-      receiverId: loggedInUser._id,
-      status: "interested",
-    })
-      .populate("senderId", userSafeData)
-      .select("_id");
-
-    if (receivedConnectionRequest.length === 0) {
-      return res.json({ message: "No new connection request received.", data: null });
-    }
-
-    res.json({
-      data: receivedConnectionRequest,
-    });
-  } catch (error) {
-    console.error("Error in getting connection requests", error);
-    res.status(400).json({ message: `Error in getting connection requests: ${error.message}` });
-  }
-});
-
 // my connections
 userRouter.get("/myConnections", userAuth, async (req, res) => {
   try {
@@ -77,6 +52,61 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
   } catch (error) {
     console.error("Error in myConnections RH" + error);
     res.status(401).json({ message: "Error in myConnections RH" + error.message });
+  }
+});
+
+// received connection requests
+userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
+    const receivedConnectionRequest = await ConnectionRequestsModel.find({
+      receiverId: loggedInUser._id,
+      status: "interested",
+    })
+      .populate("senderId", userSafeData)
+      .select("_id");
+
+    if (receivedConnectionRequest.length === 0) {
+      return res.json({ message: "No new connection request received.", data: null });
+    }
+
+    res.json({
+      data: receivedConnectionRequest,
+    });
+  } catch (error) {
+    console.error("Error in getting connection requests", error);
+    res.status(400).json({ message: `Error in getting connection requests: ${error.message}` });
+  }
+});
+
+// get sent connection requests
+userRouter.get("/getSentConnectionRequests", userAuth, async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+    const userSafeData = ["firstName", "lastName", "userName", "age", "gender", "Technical_skills", "bio"];
+
+    const sentConnectionRequests = await ConnectionRequestsModel.find({
+      senderId: loggedInUser._id,
+    })
+      .select("_id")
+      .populate("receiverId", userSafeData);
+
+    if (sentConnectionRequests.length === 0) {
+      return res.json({
+        message: "You have no sent connection request.",
+        data: null,
+      });
+    }
+
+    res.json({
+      data: sentConnectionRequests,
+    });
+  } catch (error) {
+    console.error("Error in getting sent connection requests: " + error);
+    res.status(400).json({
+      message: `Error in getting sent connection requests: ${error.message}`,
+    });
   }
 });
 
