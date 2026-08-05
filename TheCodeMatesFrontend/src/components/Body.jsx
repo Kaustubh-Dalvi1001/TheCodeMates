@@ -5,7 +5,7 @@ import Footer from "./Footer";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUser } from "./api";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../store/userSlice";
+import { addUser, removeUser } from "../store/userSlice";
 import { toast } from "react-toastify";
 import { useRef } from "react";
 

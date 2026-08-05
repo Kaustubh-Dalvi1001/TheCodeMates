@@ -31,14 +31,14 @@ authRouter.post("/userSignUp", async (req, res) => {
       });
     } else if (error.code === 11000) {
       console.log("error in index: ", error.errmsg);
-      res.send({
+      res.json({
         message: "Error in adding user: ",
         err: error.errmsg,
       });
     } else {
       console.error("error in saving user: ", error);
 
-      res.status(401).send({
+      res.status(401).json({
         error: error.message,
       });
     }

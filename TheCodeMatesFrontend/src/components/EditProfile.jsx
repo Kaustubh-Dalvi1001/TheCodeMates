@@ -79,13 +79,7 @@ const EditProfile = () => {
   };
 
   useEffect(() => {
-    register("Technical_skills", {
-      validate: (value) => {
-        // value here is the whole technicalSkills array
-        if (!value || value.length === 0) return "At least one technical skill is required";
-        return true;
-      },
-    });
+    register("Technical_skills");
   }, [register]);
 
   // update profile
@@ -135,13 +129,9 @@ const EditProfile = () => {
 
             {/* first name */}
             <div className="relative">
-              <label className="label">
-                First Name <span className="text-red-300">*</span>
-              </label>
+              <label className="label">First Name</label>
               <input
-                {...register("firstName", {
-                  required: { value: true, message: "First Name is required." },
-                })}
+                {...register("firstName")}
                 type="text"
                 className="input pr-10"
                 maxLength={50}
@@ -173,12 +163,9 @@ const EditProfile = () => {
 
             {/* age */}
             <div>
-              <label className="label">
-                Age <span className="text-red-300">*</span>
-              </label>
+              <label className="label">Age</label>
               <input
                 {...register("age", {
-                  required: { value: true, message: "Age is required" },
                   min: { value: 10, message: "Minimum age should be 10 years old." },
                   max: { value: 100, message: "Maximum age should be 100 years old." },
                 })}
@@ -191,37 +178,20 @@ const EditProfile = () => {
 
             {/* gender */}
             <div className="flex flex-col gap-2">
-              <label className="label">
-                Gender <span className="text-red-300">*</span>
-              </label>
+              <label className="label">Gender</label>
               <div className="flex justify-around">
                 <label className="flex gap-2 items-center">
-                  <input
-                    {...register("gender", { required: { value: true, message: "Gender is required." } })}
-                    type="radio"
-                    value="male"
-                    className="radio"
-                  />
+                  <input {...register("gender")} type="radio" value="male" className="radio" />
                   <span> Male </span>
                 </label>
 
                 <label className="flex gap-2 items-center">
-                  <input
-                    {...register("gender", { required: true, message: "Gender is required." })}
-                    type="radio"
-                    value="female"
-                    className="radio"
-                  />
+                  <input {...register("gender")} type="radio" value="female" className="radio" />
                   <span> Female</span>
                 </label>
 
                 <label className="flex gap-2 items-center">
-                  <input
-                    {...register("gender", { required: { value: true, message: "Gender is required." } })}
-                    type="radio"
-                    value="others"
-                    className="radio"
-                  />
+                  <input {...register("gender")} type="radio" value="others" className="radio" />
                   <span> Others </span>
                 </label>
               </div>
@@ -247,7 +217,7 @@ const EditProfile = () => {
             {/* technical skills */}
             <div className="col-span-2 relative">
               <label className="label">
-                Technical Skills <span className="text-red-300">*</span>
+                Technical Skills
               </label>
               <input
                 type="text"

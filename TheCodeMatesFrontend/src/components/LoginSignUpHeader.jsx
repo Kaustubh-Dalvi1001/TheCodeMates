@@ -1,7 +1,8 @@
 import React from "react";
 import logo from "../assets/TCM_Logo.png";
+import { NavLink } from "react-router-dom";
 
-const LoginSignUpHeader = () => {
+const LoginSignUpHeader = ({ page }) => {
   return (
     <div>
       <header className="navbar bg-base-200 shadow-sm grid grid-cols-3 items-center">
@@ -21,9 +22,15 @@ const LoginSignUpHeader = () => {
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-            <li>
-              <a>Sign-Up</a>
-            </li>
+            {page === "signup" ? (
+              <li>
+                <NavLink to="/login">Login</NavLink>
+              </li>
+            ) : (
+              <li>
+                <NavLink to="/signup">Sign-Up</NavLink>
+              </li>
+            )}
           </ul>
         </div>
         <div className="flex justify-center items-center gap-2 font-medium">

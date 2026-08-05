@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import Connections from "./components/Connections";
 import ReceivedConnections from "./components/ReceivedConnections";
 import SentConnectionRequests from "./components/SentConnectionRequests";
+import Signup from "./components/Signup";
 
 function App() {
   const queryClient = new QueryClient();
@@ -27,8 +28,9 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/connections" element={<Connections />} />
                 <Route path="/receivedConnections" element={<ReceivedConnections />} />
-                <Route path="/SentConnectionRequest" element={<SentConnectionRequests />} />
+                <Route path="/sentConnectionRequest" element={<SentConnectionRequests />} />
               </Route>
+              <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
             </Routes>
           </BrowserRouter>

@@ -7,7 +7,6 @@ const userSchema = new Schema(
   {
     firstName: {
       type: String,
-      required: true,
       maxLength: 50,
       trim: true,
     },
@@ -53,7 +52,6 @@ const userSchema = new Schema(
     },
     age: {
       type: Number,
-      required: true,
       trim: true,
       min: 10,
       max: 100,
@@ -61,20 +59,10 @@ const userSchema = new Schema(
     gender: {
       type: String,
       lowercase: true,
-      required: true,
       trim: true,
       validate(value) {
         if (!["male", "female", "others"].includes(value)) {
           throw new Error("Gender data is not valid!!");
-        }
-      },
-    },
-    Technical_skills: {
-      type: [String],
-      required: true,
-      validate(value) {
-        if (value.length > 20) {
-          throw new Error("Only 20 skills are allowed!!");
         }
       },
     },
@@ -83,6 +71,14 @@ const userSchema = new Schema(
       default: "This is my default bio.",
       trim: true,
       maxLength: 200,
+    },
+    Technical_skills: {
+      type: [String],
+      validate(value) {
+        if (value.length > 20) {
+          throw new Error("Only 20 skills are allowed!!");
+        }
+      },
     },
   },
   {

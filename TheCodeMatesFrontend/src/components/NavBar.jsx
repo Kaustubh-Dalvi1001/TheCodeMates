@@ -68,7 +68,7 @@ const NavBar = () => {
               <NavLink to="/receivedConnections">Received Connections</NavLink>
             </li>
             <li>
-              <NavLink to="/SentConnectionRequest">Sent Connections</NavLink>
+              <NavLink to="/sentConnectionRequest">Sent Connections</NavLink>
             </li>
             <li>
               <button onClick={logout}>Logout</button>

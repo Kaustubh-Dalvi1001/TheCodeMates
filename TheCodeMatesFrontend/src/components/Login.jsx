@@ -38,7 +38,7 @@ const Login = () => {
     },
   });
 
-  const submitData = async (userData) => {
+  const submitLoginData = async (userData) => {
     loginUserMutate(userData);
     reset();
   };
@@ -49,39 +49,35 @@ const Login = () => {
       <LoginSignUpHeader />
       {/* Body */}
       <div className="flex-1 overflow-y-auto flex justify-center items-center">
-        <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-          <div className="card-body">
-            <form action="#" onSubmit={handleSubmit(submitData)}>
-              <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-                <legend className="fieldset-legend">Login</legend>
-                <label className="label">Email ID</label>
-                <input
-                  {...register("emailId", { required: true })}
-                  type="email"
-                  className="input"
-                  placeholder="Email ID"
-                  defaultValue="natasha@gmail.com"
-                />
-                {errors.emailId && <p className="text-red-400"> Email ID is required. </p>}
-                <label className="label">Password</label>
-                <input
-                  {...register("password", { required: true })}
-                  type="password"
-                  className="input"
-                  placeholder="Password"
-                  defaultValue="Natasha@1001"
-                />
-                {errors.password && <p className="text-red-400"> Password is required. </p>}
-                {/* <div>
+        <form action="#" onSubmit={handleSubmit(submitLoginData)}>
+          <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+            <legend className="fieldset-legend">Login</legend>
+            <label className="label">Email ID</label>
+            <input
+              {...register("emailId", { required: true })}
+              type="email"
+              className="input"
+              placeholder="Email ID"
+              defaultValue="natasha@gmail.com"
+            />
+            {errors.emailId && <p className="text-red-400"> Email ID is required. </p>}
+            <label className="label">Password</label>
+            <input
+              {...register("password", { required: true })}
+              type="password"
+              className="input"
+              placeholder="Password"
+              defaultValue="Natasha@1001"
+            />
+            {errors.password && <p className="text-red-400"> Password is required. </p>}
+            {/* <div>
                 <a className="link link-hover">Forgot password?</a>
               </div> */}
-                <button type="submit" className="btn btn-neutral mt-4">
-                  Login
-                </button>
-              </fieldset>
-            </form>
-          </div>
-        </div>
+            <button type="submit" className="btn btn-neutral mt-4">
+              Login
+            </button>
+          </fieldset>
+        </form>
       </div>
       {/* Footer */}
       <Footer />
