@@ -115,7 +115,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       .limit(limit);
 
     if (allUsers.length === 0) {
-      return res.json({ message: "You have no new users in you feed." });
+      return res.json({ message: "You have no new users in you feed.", data: null });
     }
 
     res.json({

@@ -46,8 +46,11 @@ connectionReqRouter.post("/request/send/:status/:receiverId", userAuth, async (r
     const savedRequest = await userRequest.save();
 
     res.json({
-      message: `${status === "interested" ? "Connection request sent successfully." : "Profiled ignored succeessfully."}`,
-      savedRequest,
+      message: `${
+        status === "interested"
+          ? `Connection request sent successfully to ${receiverPresent?.userName}.`
+          : `${receiverPresent?.userName} ignored succeessfully.`
+      }`,
     });
   } catch (error) {
     console.error("Error in connection request", error);

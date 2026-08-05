@@ -85,3 +85,13 @@ export const reviewRequest = async (reqReviewData) => {
     throw error;
   }
 };
+
+export const connectionRequest = async (reqData) => {
+  try {
+    const { reqStatus, receiverId } = reqData;
+    const response = await api.post(`/request/send/${reqStatus}/${receiverId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

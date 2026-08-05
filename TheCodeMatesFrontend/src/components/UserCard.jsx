@@ -1,10 +1,10 @@
 import { UserPlus, UserX, CircleCheck, CircleX } from "lucide-react";
 import React from "react";
 
-const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest }) => {
-  const { firstName, lastName, userName, gender, age, bio, Technical_skills } = user ?? {};
+const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, connectionReqMutate }) => {
+  const { _id, firstName, lastName, userName, gender, age, bio, Technical_skills } = user ?? {};
   return (
-    <div className="card bg-base-200 w-96 shadow-lg">
+    <div className="card bg-base-200 shadow-lg">
       <div className="card-body">
         <h2 className="card-title">{userName}</h2>
         <div>
@@ -21,10 +21,16 @@ const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest }) =>
         </div>
         {page === "feed" ? (
           <div className="card-actions justify-end">
-            <button className="btn btn-soft btn-sm">
+            <button
+              onClick={() => connectionReqMutate({ reqStatus: "ignored", receiverId: _id })}
+              className="btn btn-soft btn-sm"
+            >
               Ignore <UserX className="w-4 h-4" />
             </button>
-            <button className="btn btn-secondary btn-sm">
+            <button
+              onClick={() => connectionReqMutate({ reqStatus: "interested", receiverId: _id })}
+              className="btn btn-secondary btn-sm"
+            >
               Connect <UserPlus className="w-4 h-4" />
             </button>
           </div>

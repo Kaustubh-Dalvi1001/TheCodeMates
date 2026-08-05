@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { fetchReceivedConnections, reviewRequest } from "./api";
 import { toast } from "react-toastify";
@@ -27,6 +27,7 @@ const ReceivedConnections = () => {
       return true;
     },
     enabled: !storeReceivedRequests,
+    placeholderData: keepPreviousData,
   });
 
   if (isError) {

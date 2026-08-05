@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import { fetchConnetions } from "./api";
 import { toast } from "react-toastify";
@@ -26,6 +26,7 @@ const Connections = () => {
       return true;
     },
     enabled: !storeConnections,
+    placeholderData: keepPreviousData,
   });
 
   if (isError) {

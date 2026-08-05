@@ -60,7 +60,7 @@ const Login = () => {
                   type="email"
                   className="input"
                   placeholder="Email ID"
-                  defaultValue="kaustubh@gmail.com"
+                  defaultValue="natasha@gmail.com"
                 />
                 {errors.emailId && <p className="text-red-400"> Email ID is required. </p>}
                 <label className="label">Password</label>
@@ -69,7 +69,7 @@ const Login = () => {
                   type="password"
                   className="input"
                   placeholder="Password"
-                  defaultValue="Kaustubh@1001"
+                  defaultValue="Natasha@1001"
                 />
                 {errors.password && <p className="text-red-400"> Password is required. </p>}
                 {/* <div>
