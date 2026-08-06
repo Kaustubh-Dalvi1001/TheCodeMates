@@ -58,7 +58,7 @@ authRouter.post("/userSignUp", async (req, res) => {
       });
     } else if (error.code === 11000) {
       console.log("error in index: ", error.errmsg);
-      res.json({
+      res.status(400).json({
         message: "Error in adding user: ",
         err: error.errmsg,
       });

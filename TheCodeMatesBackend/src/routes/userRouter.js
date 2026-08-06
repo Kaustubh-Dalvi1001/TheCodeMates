@@ -6,6 +6,66 @@ import { UserModel } from "../models/userSchema.js";
 export const userRouter = express.Router();
 
 // my connections
+// userRouter.get("/myConnections", userAuth, async (req, res) => {
+//   try {
+//     const loggedInUser = req.user;
+
+//     const userSafeData = [
+//       "firstName",
+//       "lastName",
+//       "userName",
+//       "age",
+//       "gender",
+//       "bio",
+//       "Technical_skills",
+//       "otherSkills",
+//       "hobbies",
+//     ];
+
+//     const connectionsArr = await ConnectionRequestsModel.find({
+//       $or: [
+//         {
+//           senderId: loggedInUser._id,
+//         },
+//         {
+//           receiverId: loggedInUser._id,
+//         },
+//       ],
+//       status: "accepted",
+//     })
+//       .select("_id")
+//       .populate("senderId", userSafeData)
+//       .populate("receiverId", userSafeData);
+
+//     if (connectionsArr.length === 0) {
+//       return res.json({ message: "You have no connection.", data: null });
+//     }
+
+//     // console.log(connectionsArr);
+
+//     const myConnections = connectionsArr.map((eachConnection) => {
+//       // Because you are populating senderId becomes an object whith the user values. Its not just a normal _id even if the name suggests so.
+//       const otherUser = eachConnection.senderId._id.equals(loggedInUser._id)
+//         ? eachConnection.receiverId
+//         : eachConnection.senderId;
+
+//       return {
+//         connectionId: eachConnection._id,
+//         ...otherUser.toObject(),
+//       };
+//     });
+
+//     res.json({
+//       message: `You have ${connectionsArr.length} connection${connectionsArr.length > 1 ? "s" : ""}.`,
+//       data: myConnections,
+//     });
+//   } catch (error) {
+//     console.error("Error in myConnections RH" + error);
+//     res.status(401).json({ message: "Error in myConnections RH" + error.message });
+//   }
+// });
+
+// my connections
 userRouter.get("/myConnections", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
@@ -33,7 +93,7 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
       ],
       status: "accepted",
     })
-      .select("_id")
+      .select("_id senderId receiverId")
       .populate("senderId", userSafeData)
       .populate("receiverId", userSafeData);
 
@@ -41,30 +101,37 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
       return res.json({ message: "You have no connection.", data: null });
     }
 
-    // console.log(connectionsArr);
+    const myConnections = connectionsArr
+      .filter((eachConnection) => {.
+        if (!eachConnection.senderId || !eachConnection.receiverId) {
+          console.warn(
+            `Skipping connection ${eachConnection._id}: missing referenced user (sender or receiver was deleted).`,
+          );
+          return false;
+        }
+        return true;
+      })
+      .map((eachConnection) => {
+        // Because you are populating senderId becomes an object whith the user values. Its not just a normal _id even if the name suggests so.
+        const otherUser = eachConnection.senderId._id.equals(loggedInUser._id)
+          ? eachConnection.receiverId
+          : eachConnection.senderId;
 
-    const myConnections = connectionsArr.map((eachConnection) => {
-      // Because you are populating senderId becomes an object whith the user values. Its not just a normal _id even if the name suggests so.
-      const otherUser = eachConnection.senderId._id.equals(loggedInUser._id)
-        ? eachConnection.receiverId
-        : eachConnection.senderId;
-
-      return {
-        connectionId: eachConnection._id,
-        ...otherUser.toObject(),
-      };
-    });
+        return {
+          connectionId: eachConnection._id,
+          ...otherUser.toObject(),
+        };
+      });
 
     res.json({
-      message: `You have ${connectionsArr.length} connection${connectionsArr.length > 1 ? "s" : ""}.`,
-      data: myConnections,
+      message: `You have ${myConnections.length} connection${myConnections.length !== 1 ? "s" : ""}.`,
+      data: myConnections.length ? myConnections : null,
     });
   } catch (error) {
     console.error("Error in myConnections RH" + error);
     res.status(401).json({ message: "Error in myConnections RH" + error.message });
   }
 });
-
 // received connection requests
 userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
   try {
@@ -80,12 +147,14 @@ userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
       "otherSkills",
       "hobbies",
     ];
-    const receivedConnectionRequest = await ConnectionRequestsModel.find({
+    const receivedConnectionRequestArr = await ConnectionRequestsModel.find({
       receiverId: loggedInUser._id,
       status: "interested",
     })
       .populate("senderId", userSafeData)
-      .select("_id");
+      .select("_id senderId");
+
+    const receivedConnectionRequest = receivedConnectionRequestArr.filter((eachReq) => eachReq.senderId);
 
     if (receivedConnectionRequest.length === 0) {
       return res.json({ message: "No new connection request received.", data: null });
@@ -116,11 +185,13 @@ userRouter.get("/getSentConnectionRequests", userAuth, async (req, res) => {
       "hobbies",
     ];
 
-    const sentConnectionRequests = await ConnectionRequestsModel.find({
+    const sentConnectionRequestsArr = await ConnectionRequestsModel.find({
       senderId: loggedInUser._id,
     })
-      .select("_id")
+      .select("_id receiverId")
       .populate("receiverId", userSafeData);
+
+    const sentConnectionRequests = sentConnectionRequestsArr.filter((eachReq) => eachReq.receiverId);
 
     if (sentConnectionRequests.length === 0) {
       return res.json({
@@ -136,6 +207,29 @@ userRouter.get("/getSentConnectionRequests", userAuth, async (req, res) => {
     console.error("Error in getting sent connection requests: " + error);
     res.status(400).json({
       message: `Error in getting sent connection requests: ${error.message}`,
+    });
+  }
+});
+
+// cancel connection request
+userRouter.post("/cancelRequest/:reqId", userAuth, async (req, res) => {
+  try {
+    const { reqId } = req.params;
+    const cancelReqResp = await ConnectionRequestsModel.findByIdAndDelete(reqId);
+
+    if (!cancelReqResp) {
+      return res.status(400).json({
+        message: "Error in cancelling connection request",
+      });
+    }
+
+    res.json({
+      message: "Connection request cancelled successfully.",
+    });
+  } catch (error) {
+    console.error("Error in cancelling connection request: " + error);
+    res.status(400).json({
+      message: `Error in cancelling connection request" ${error.message}`,
     });
   }
 });

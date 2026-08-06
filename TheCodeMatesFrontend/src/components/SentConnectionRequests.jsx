@@ -1,6 +1,6 @@
 import React from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { fetchSentConnections } from "./api";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { cancelSentConnectionReq, fetchSentConnections } from "./api";
 import { toast } from "react-toastify";
 import UserCard from "./UserCard";
 import { useEffect } from "react";
@@ -11,8 +11,8 @@ import { Send } from "lucide-react";
 
 const SentConnectionRequests = () => {
   const dispatch = useDispatch();
-
   const storeSentConnections = useSelector((store) => store.sentRequestReducer);
+  const queryClient = useQueryClient();
 
   const {
     data: sentConnectionsData,
@@ -40,6 +40,20 @@ const SentConnectionRequests = () => {
     }
   }, [sentConnectionsData]);
 
+  const { mutate: cancelConnectionReqMutate } = useMutation({
+    mutationFn: (reqId) => cancelSentConnectionReq(reqId),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["sentConnections"] });
+      toast.success(data.message);
+    },
+    onError: (error) => {
+      console.log(error);
+      const errorMessage =
+        error?.response?.data?.message ?? error.message ?? "Error in cancelling the sent connection request.";
+      toast.error(errorMessage);
+    },
+  });
+
   if (!storeSentConnections?.data) {
     return (
       <div className="flex justify-center items-center h-full">
@@ -55,13 +69,19 @@ const SentConnectionRequests = () => {
     );
   }
 
-  console.log(sentConnectionsData);
+  // console.log(sentConnectionsData);
 
   return (
     <div className="flex p-4 justify-around flex-wrap gap-5">
       {storeSentConnections?.data?.map((eachConnection) => {
         return (
-          <UserCard user={eachConnection.receiverId} key={eachConnection._id} page="sentConnectionsPage" />
+          <UserCard
+            user={eachConnection.receiverId}
+            key={eachConnection._id}
+            page="sentConnectionsPage"
+            connectionId={eachConnection._id}
+            mutateFn={cancelConnectionReqMutate}
+          />
         );
       })}
     </div>

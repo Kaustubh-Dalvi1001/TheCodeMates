@@ -10,7 +10,7 @@ import UserCard from "./UserCard";
 
 const EditProfile = () => {
   const { profile } = useSelector((store) => store.userReucer);
-  console.log(profile);
+  // console.log(profile);
 
   const {
     _id,
@@ -173,7 +173,7 @@ const EditProfile = () => {
     onSuccess: (updatedData) => {
       // console.log(updatedData?.updatedUser);
       dispatch(addUser(updatedData.updatedUser));
-      queryClient.invalidateQueries(["loggedInUser"]);
+      queryClient.invalidateQueries({ queryKey: ["loggedInUser"] });
       toast.success(updatedData.message);
     },
     onError: (error) => {

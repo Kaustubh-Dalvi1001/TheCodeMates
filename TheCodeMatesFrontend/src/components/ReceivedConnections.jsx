@@ -49,8 +49,9 @@ const ReceivedConnections = () => {
   const { mutate: handleReviewRequest } = useMutation({
     mutationFn: (reqReviewData) => reviewRequest(reqReviewData),
     onSuccess: (data) => {
-      console.log(data);
-      dispatch(removeReceivedRequests());
+      // console.log(data);
+      // dispatch(removeReceivedRequests());
+      queryClient.invalidateQueries({ queryKey: ["receivedConnections"] });
       toast.success(data.message);
     },
     onError: (error) => {
@@ -80,7 +81,7 @@ const ReceivedConnections = () => {
     );
   }
 
-  console.log(receivedConnectionsData);
+  // console.log(receivedConnectionsData);
 
   return (
     <div className="flex flex-wrap">

@@ -2,7 +2,7 @@ import { UserPlus, UserX, CircleCheck, CircleX } from "lucide-react";
 import React from "react";
 import BadgeList from "./BadgeList";
 
-const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, connectionReqMutate }) => {
+const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, mutateFn }) => {
   const { _id, firstName, lastName, userName, gender, age, bio, Technical_skills, otherSkills, hobbies } =
     user ?? {};
   return (
@@ -42,13 +42,13 @@ const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, conn
         {page === "feed" ? (
           <div className="card-actions justify-end">
             <button
-              onClick={() => connectionReqMutate({ reqStatus: "ignored", receiverId: _id })}
+              onClick={() => mutateFn({ reqStatus: "ignored", receiverId: _id })}
               className="btn btn-soft btn-sm"
             >
               Ignore <UserX className="w-4 h-4" />
             </button>
             <button
-              onClick={() => connectionReqMutate({ reqStatus: "interested", receiverId: _id })}
+              onClick={() => mutateFn({ reqStatus: "interested", receiverId: _id })}
               className="btn btn-secondary btn-sm"
             >
               Connect <UserPlus className="w-4 h-4" />
@@ -79,7 +79,7 @@ const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, conn
           </div>
         ) : page === "sentConnectionsPage" ? (
           <div className="card-actions justify-end">
-            <button className="btn btn-soft btn-sm">
+            <button onClick={() => mutateFn(connectionId)} className="btn btn-soft btn-sm">
               Cancel Connection Request <CircleX className="w-4 h-4" />
             </button>
           </div>

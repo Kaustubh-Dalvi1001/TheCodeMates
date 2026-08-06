@@ -1,4 +1,4 @@
-import { keepPreviousData, useMutation, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import { connectionRequest, userFeed } from "./api";
 import { data } from "react-router-dom";
@@ -13,6 +13,8 @@ const Feed = () => {
 
   const dispatch = useDispatch();
 
+  const queryClient = useQueryClient();
+
   const {
     data: feed,
     isError,
@@ -20,7 +22,7 @@ const Feed = () => {
   } = useQuery({
     queryKey: ["userFeed"],
     queryFn: userFeed,
-    enabled: !storeUserFeed,
+    // enabled: !storeUserFeed,
     placeholderData: keepPreviousData,
   });
 
@@ -41,7 +43,8 @@ const Feed = () => {
   const { mutate: connectionReqMutate } = useMutation({
     mutationFn: (reqData) => connectionRequest(reqData),
     onSuccess: (data) => {
-      dispatch(removeFeed());
+      // dispatch(removeFeed());
+      queryClient.invalidateQueries({ queryKey: ["userFeed"] });
       toast.success(data.message);
       // console.log(data);
     },
@@ -70,7 +73,7 @@ const Feed = () => {
 
   return (
     <div className="flex justify-center items-center h-full">
-      {storeUserFeed && <UserCard user={storeUserFeed[0]} connectionReqMutate={connectionReqMutate} />}
+      {storeUserFeed && <UserCard user={storeUserFeed[0]} mutateFn={connectionReqMutate} />}
     </div>
   );
 };

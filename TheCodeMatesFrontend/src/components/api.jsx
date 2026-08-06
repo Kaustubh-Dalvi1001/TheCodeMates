@@ -93,6 +93,15 @@ export const fetchSentConnections = async () => {
   }
 };
 
+export const cancelSentConnectionReq = async (reqId) => {
+  try {
+    const response = await api.post(`/cancelRequest/${reqId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const reviewRequest = async (reqReviewData) => {
   const { reqStatus, reqId } = reqReviewData;
 
