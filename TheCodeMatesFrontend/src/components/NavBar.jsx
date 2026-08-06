@@ -18,7 +18,7 @@ const NavBar = () => {
   const { mutate: logout } = useMutation({
     mutationFn: logoutUser,
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
       toast.success(data);
       dispatch(removeUser());
       dispatch(removeFeed());

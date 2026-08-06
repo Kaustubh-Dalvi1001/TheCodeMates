@@ -185,7 +185,7 @@ const EditProfile = () => {
   });
 
   const handleEditProfile = (data) => {
-    console.log(data);
+    // console.log(data);
     mutate(data);
   };
   return (

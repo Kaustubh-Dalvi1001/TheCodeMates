@@ -12,7 +12,7 @@ const Connections = () => {
   const dispatch = useDispatch();
 
   const storeConnections = useSelector((store) => store?.connectionReducer);
-  console.log(storeConnections);
+  // console.log(storeConnections);
 
   const {
     data: connections,
@@ -62,7 +62,7 @@ const Connections = () => {
           </div>
         </div>
       ) : (
-        <div className="flex flex-wrap">
+        <div className="flex justify-evenly flex-wrap">
           {storeConnections?.data?.map((eachConnection) => {
             return (
               <div key={eachConnection._id} className="p-4">

@@ -23,7 +23,7 @@ const Signup = () => {
   const { mutate: signupMutate } = useMutation({
     mutationFn: (data) => signupUser(data),
     onSuccess: (data) => {
-      console.log(data);
+      // console.log(data);
       dispatch(addUser(data.userData));
       toast.success(data.message);
       navigate("/profile");
