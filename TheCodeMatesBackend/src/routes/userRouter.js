@@ -102,7 +102,7 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
     }
 
     const myConnections = connectionsArr
-      .filter((eachConnection) => {.
+      .filter((eachConnection) => {
         if (!eachConnection.senderId || !eachConnection.receiverId) {
           console.warn(
             `Skipping connection ${eachConnection._id}: missing referenced user (sender or receiver was deleted).`,
