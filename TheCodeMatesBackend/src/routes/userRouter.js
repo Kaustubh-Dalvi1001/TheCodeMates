@@ -124,7 +124,7 @@ userRouter.get("/getSentConnectionRequests", userAuth, async (req, res) => {
 
     if (sentConnectionRequests.length === 0) {
       return res.json({
-        message: "You have no sent connection request.",
+        message: "You have not sent any connection request.",
         data: null,
       });
     }

@@ -16,9 +16,36 @@ authRouter.post("/userSignUp", async (req, res) => {
     const updatedUserPass = { ...clientUser, password: passHash };
     const newUser = new UserModel(updatedUserPass);
     const savedUser = await newUser.save();
+    const {
+      _id,
+      userName,
+      firstName,
+      lastName,
+      age,
+      gender,
+      bio,
+      emailId,
+      Technical_skills,
+      otherSkills,
+      hobbies,
+    } = savedUser;
+    const token = savedUser.getJWT();
+    res.cookie("token", token, { maxAge: 7 * 24 * 60 * 60 * 1000 });
     res.json({
-      message: "User added successfully!!",
-      savedUser,
+      message: `Welcome ${savedUser.userName}`,
+      userData: {
+        _id,
+        userName,
+        firstName,
+        lastName,
+        age,
+        gender,
+        bio,
+        emailId,
+        Technical_skills,
+        otherSkills,
+        hobbies,
+      },
     });
   } catch (error) {
     // Mongoose validation errors (missing required fields, bad types, etc.)

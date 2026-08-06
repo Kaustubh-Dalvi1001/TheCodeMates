@@ -25,7 +25,7 @@ const Connections = () => {
       if (!error?.response) return false;
       return true;
     },
-    enabled: !storeConnections,
+    // enabled: !storeConnections?.data,
     placeholderData: keepPreviousData,
   });
 

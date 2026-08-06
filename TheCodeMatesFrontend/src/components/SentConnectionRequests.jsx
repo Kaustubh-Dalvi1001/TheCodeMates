@@ -6,6 +6,8 @@ import UserCard from "./UserCard";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addSentRequests } from "../store/sentRequestSlice";
+import { NavLink } from "react-router-dom";
+import { Send } from "lucide-react";
 
 const SentConnectionRequests = () => {
   const dispatch = useDispatch();
@@ -20,7 +22,7 @@ const SentConnectionRequests = () => {
     queryKey: ["sentConnections"],
     queryFn: fetchSentConnections,
     placeholderData: keepPreviousData,
-    enabled: !storeSentConnections,
+    // enabled: !storeSentConnections?.data,
   });
 
   if (isError) {
@@ -39,7 +41,18 @@ const SentConnectionRequests = () => {
   }, [sentConnectionsData]);
 
   if (!storeSentConnections?.data) {
-    return <div>You have not sent any connection requests.</div>;
+    return (
+      <div className="flex justify-center items-center h-full">
+        <div className="text-center max-w-md">
+          <Send className="h-20 w-20 mx-auto text-base-content/30" strokeWidth={1.5} />
+          <h3 className="text-xl font-bold mt-4">No requests sent</h3>
+          <p className="py-4 text-base-content/70">{storeSentConnections?.message}</p>
+          <NavLink to="/feed" className="btn btn-primary">
+            Find people to connect with
+          </NavLink>
+        </div>
+      </div>
+    );
   }
 
   console.log(sentConnectionsData);

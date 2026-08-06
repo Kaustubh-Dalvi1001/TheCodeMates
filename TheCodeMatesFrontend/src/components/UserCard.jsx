@@ -1,5 +1,6 @@
 import { UserPlus, UserX, CircleCheck, CircleX } from "lucide-react";
 import React from "react";
+import BadgeList from "./BadgeList";
 
 const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, connectionReqMutate }) => {
   const { _id, firstName, lastName, userName, gender, age, bio, Technical_skills, otherSkills, hobbies } =
@@ -7,19 +8,37 @@ const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, conn
   return (
     <div className="card bg-base-200 w-96 shadow-lg">
       <div className="card-body">
-        <h2 className="card-title">{userName}</h2>
-        <div>
-          {firstName} {lastName}
+        {/* user name */}
+        <h2
+          className={`card-title ${userName?.length >= 15 && "tooltip tooltip-bottom"}`}
+          data-tip={userName}
+        >
+          <span className="truncate"> {userName} </span>
+        </h2>
+
+        {/* first name */}
+        <div
+          className={`${(firstName?.length >= 15 || lastName?.length >= 15) && "tooltip tooltip-bottom"}`}
+          data-tip={`${firstName} ${lastName}`}
+        >
+          <div className="truncate">
+            {firstName} {lastName}
+          </div>
         </div>
+
+        {/* gender and age */}
         <div>
           {gender} {age}
         </div>
-        <div>{bio}</div>
-        <div>{Technical_skills?.join(", ")}</div>
-        <div>{otherSkills?.join(", ")}</div>
-        <div>
-          <span> {hobbies?.join(", ")} </span>
+
+        {/* bio */}
+        <div className={`${bio?.length >= 50 && "tooltip tooltip-bottom"}`} data-tip={bio}>
+          <div className="truncate"> {bio} </div>
         </div>
+
+        <BadgeList items={Technical_skills} colorClass="badge-primary" />
+        <BadgeList items={otherSkills} colorClass="badge-accent" />
+        <BadgeList items={hobbies} colorClass="badge-secondary" />
         {page === "feed" ? (
           <div className="card-actions justify-end">
             <button

@@ -6,9 +6,12 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { signupUser } from "./api";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../store/userSlice";
 
 const Signup = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     register,
@@ -21,8 +24,9 @@ const Signup = () => {
     mutationFn: (data) => signupUser(data),
     onSuccess: (data) => {
       console.log(data);
+      dispatch(addUser(data.userData));
       toast.success(data.message);
-      navigate("/login");
+      navigate("/profile");
     },
     onError: (error) => {
       console.log(error);
@@ -44,7 +48,7 @@ const Signup = () => {
       <div className="flex-1 overflow-y-auto flex justify-center items-center">
         <form action="#" onSubmit={handleSubmit(submitSignupData)}>
           <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
-            <legend className="fieldset-legend">Signup</legend>
+            <legend className="fieldset-legend">Sign Up</legend>
 
             <label className="label">
               Email ID <span className="text-red-300">*</span>
@@ -83,7 +87,7 @@ const Signup = () => {
             />
 
             <button type="submit" className="btn btn-neutral mt-4">
-              Signup
+              Sign Up
             </button>
           </fieldset>
         </form>

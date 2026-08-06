@@ -1,2 +1,9 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.tooltip:before {
+  white-space: pre-wrap;
+  max-width: 16rem;
+  text-align: center;
+  word-wrap: break-word;
+}

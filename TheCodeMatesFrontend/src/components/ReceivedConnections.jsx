@@ -26,7 +26,7 @@ const ReceivedConnections = () => {
       if (!error?.response) return false;
       return true;
     },
-    enabled: !storeReceivedRequests,
+    // enabled: !storeReceivedRequests?.data,
     placeholderData: keepPreviousData,
   });
 
