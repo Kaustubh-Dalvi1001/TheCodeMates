@@ -130,10 +130,9 @@ authRouter.post("/userLogin", async (req, res) => {
 });
 
 // logout
-authRouter.post("/userLogout", userAuth, (req, res) => {
-  const { userName } = req.user;
+authRouter.post("/userLogout", (req, res) => {
   try {
-    res.cookie("token", null, { maxAge: 0 }).json({ message: `${userName} logged out successfully` });
+    res.cookie("token", null, { maxAge: 0 }).json({ message: `Logged out successfully` });
   } catch (error) {
     console.error("Error in logging out the user", error);
     res.status(401).json({ message: "Error in logging out the user" + error.message });
