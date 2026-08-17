@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import NavBar from "./NavBar";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "./Footer";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchUser } from "./api";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../store/userSlice";
@@ -16,6 +16,7 @@ const Body = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { status, profile } = useSelector((store) => store.userReucer);
+  const queryClient = useQueryClient();
 
   const {
     data: userData,
@@ -34,11 +35,12 @@ const Body = () => {
       const backendErrorMessage = userDataError?.response?.data?.message;
       if (httpStatus === 401 || httpStatus === 404) {
         dispatch(removeUser());
+        queryClient.clear();
         toast.error(backendErrorMessage);
         navigate("/login");
       }
     }
-  }, [isError, userDataError, navigate, dispatch]);
+  }, [isError, userDataError, navigate, dispatch, queryClient]);
 
   // console.log(userData?.userProfile ?? storeUserData);
 
