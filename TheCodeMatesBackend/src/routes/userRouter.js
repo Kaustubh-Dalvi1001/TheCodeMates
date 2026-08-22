@@ -6,66 +6,6 @@ import { UserModel } from "../models/userSchema.js";
 export const userRouter = express.Router();
 
 // my connections
-// userRouter.get("/myConnections", userAuth, async (req, res) => {
-//   try {
-//     const loggedInUser = req.user;
-
-//     const userSafeData = [
-//       "firstName",
-//       "lastName",
-//       "userName",
-//       "age",
-//       "gender",
-//       "bio",
-//       "Technical_skills",
-//       "otherSkills",
-//       "hobbies",
-//     ];
-
-//     const connectionsArr = await ConnectionRequestsModel.find({
-//       $or: [
-//         {
-//           senderId: loggedInUser._id,
-//         },
-//         {
-//           receiverId: loggedInUser._id,
-//         },
-//       ],
-//       status: "accepted",
-//     })
-//       .select("_id")
-//       .populate("senderId", userSafeData)
-//       .populate("receiverId", userSafeData);
-
-//     if (connectionsArr.length === 0) {
-//       return res.json({ message: "You have no connection.", data: null });
-//     }
-
-//     // console.log(connectionsArr);
-
-//     const myConnections = connectionsArr.map((eachConnection) => {
-//       // Because you are populating senderId becomes an object whith the user values. Its not just a normal _id even if the name suggests so.
-//       const otherUser = eachConnection.senderId._id.equals(loggedInUser._id)
-//         ? eachConnection.receiverId
-//         : eachConnection.senderId;
-
-//       return {
-//         connectionId: eachConnection._id,
-//         ...otherUser.toObject(),
-//       };
-//     });
-
-//     res.json({
-//       message: `You have ${connectionsArr.length} connection${connectionsArr.length > 1 ? "s" : ""}.`,
-//       data: myConnections,
-//     });
-//   } catch (error) {
-//     console.error("Error in myConnections RH" + error);
-//     res.status(401).json({ message: "Error in myConnections RH" + error.message });
-//   }
-// });
-
-// my connections
 userRouter.get("/myConnections", userAuth, async (req, res) => {
   try {
     const loggedInUser = req.user;
@@ -80,6 +20,7 @@ userRouter.get("/myConnections", userAuth, async (req, res) => {
       "Technical_skills",
       "otherSkills",
       "hobbies",
+      "profilePhotoUrl",
     ];
 
     const connectionsArr = await ConnectionRequestsModel.find({
@@ -146,6 +87,7 @@ userRouter.get("/receivedConnectionRequest", userAuth, async (req, res) => {
       "Technical_skills",
       "otherSkills",
       "hobbies",
+      "profilePhotoUrl"
     ];
     const receivedConnectionRequestArr = await ConnectionRequestsModel.find({
       receiverId: loggedInUser._id,
@@ -183,6 +125,7 @@ userRouter.get("/getSentConnectionRequests", userAuth, async (req, res) => {
       "Technical_skills",
       "otherSkills",
       "hobbies",
+      "profilePhotoUrl"
     ];
 
     const sentConnectionRequestsArr = await ConnectionRequestsModel.find({
@@ -267,6 +210,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
       "Technical_skills",
       "otherSkills",
       "hobbies",
+      "profilePhotoUrl"
     ];
 
     const allUsers = await UserModel.find({

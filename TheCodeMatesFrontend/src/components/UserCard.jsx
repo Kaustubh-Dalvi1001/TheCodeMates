@@ -1,12 +1,30 @@
 import { UserPlus, UserX, CircleCheck, CircleX } from "lucide-react";
-import React from "react";
 import BadgeList from "./BadgeList";
 
 const UserCard = ({ user, page = "feed", connectionId, handleReviewRequest, mutateFn }) => {
-  const { _id, firstName, lastName, userName, gender, age, bio, Technical_skills, otherSkills, hobbies } =
-    user ?? {};
+  const {
+    _id,
+    firstName,
+    lastName,
+    userName,
+    gender,
+    age,
+    bio,
+    Technical_skills,
+    otherSkills,
+    hobbies,
+    profilePhotoUrl,
+  } = user ?? {};
   return (
     <div className="card bg-base-200 w-96 shadow-lg">
+      {profilePhotoUrl && (
+        <div className="flex justify-center p-5">
+          <figure className="w-50">
+            <img src={profilePhotoUrl} alt="Shoes" className="rounded-xl w-full" />
+          </figure>
+        </div>
+      )}
+
       <div className="card-body">
         {/* user name */}
         <h2

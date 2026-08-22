@@ -1,4 +1,3 @@
-import React from "react";
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cancelSentConnectionReq, fetchSentConnections } from "./api";
 import { toast } from "react-toastify";
