@@ -5,6 +5,15 @@ import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
   {
+    profilePhotoUrl: {
+      type: String,
+      trim: true,
+      validate(value) {
+        if (value !== "" && !validator.isURL(value)) {
+          throw new Error("Cloudinary image URL is invalid");
+        }
+      },
+    },
     firstName: {
       type: String,
       maxLength: 50,

@@ -7,7 +7,7 @@ export const connectDB = async (startServerFn) => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("DB Connected successfully");
     UserModel.syncIndexes();
-    ConnectionRequestsModel.syncIndexes();``
+    ConnectionRequestsModel.syncIndexes();
     startServerFn();
   } catch (error) {
     console.error("error in DB connection: ", error);

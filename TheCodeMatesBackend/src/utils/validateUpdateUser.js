@@ -3,6 +3,7 @@ import validator from "validator";
 export const ValidateUpdateUserApi = (reqBody) => {
   // Validating req query params
   const acceptedFields = [
+    "profilePhotoUrl",
     "firstName",
     "lastName",
     "userName",
@@ -23,6 +24,7 @@ export const ValidateUpdateUserApi = (reqBody) => {
 
   // Validating reqBody
   const {
+    profilePhotoUrl,
     firstName,
     lastName,
     userName,
@@ -34,6 +36,12 @@ export const ValidateUpdateUserApi = (reqBody) => {
     otherSkills,
     hobbies,
   } = reqBody;
+
+  if (profilePhotoUrl) {
+    if (profilePhotoUrl !== "" && !validator.isURL(profilePhotoUrl)) {
+      throw new Error("Clouginary image URL is invalid");
+    }
+  }
 
   if (firstName?.length > 50) {
     throw new Error("First Name cannot be more than 50 characters.");

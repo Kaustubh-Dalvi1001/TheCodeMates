@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import UserCard from "./UserCard";
 
 const EditProfile = () => {
+  const [prevImgURL, setPrevImgURL] = useState(null);
+
   const { profile } = useSelector((store) => store.userReucer);
   // console.log(profile);
 
@@ -24,6 +26,7 @@ const EditProfile = () => {
     Technical_skills,
     otherSkills,
     hobbies,
+    profilePhotoUrl,
   } = profile ?? {};
 
   const [inputChar, setInpChar] = useState({
@@ -45,8 +48,8 @@ const EditProfile = () => {
   const {
     register,
     handleSubmit,
-    reset,
     watch,
+    watch: watchPhoto,
     setValue,
     formState: { errors },
   } = useForm({
@@ -58,6 +61,23 @@ const EditProfile = () => {
       bio,
     },
   });
+
+  // Photo
+  const photoFile = watchPhoto("photo");
+
+  useEffect(() => {
+    if (profilePhotoUrl) {
+      setPrevImgURL(profilePhotoUrl);
+    }
+  }, [profilePhotoUrl, photoFile]);
+
+  useEffect(() => {
+    if (photoFile) {
+      const photoURL = URL.createObjectURL(photoFile[0]);
+      console.log(photoURL);
+      setPrevImgURL(photoURL);
+    }
+  }, [photoFile]);
 
   // technical skills
   const skills = watch("Technical_skills") || [];
@@ -186,8 +206,25 @@ const EditProfile = () => {
 
   const handleEditProfile = (data) => {
     // console.log(data);
-    mutate(data);
+
+    const { photo, firstName, lastName, age, gender, bio, Technical_skills, otherSkills, hobbies } = data;
+    // Form data
+    const formData = new FormData();
+    if (photo && photo.length > 0) {
+      formData.append("photo", data.photo[0]);
+    }
+
+    formData.append("userName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("age", age);
+    formData.append("gender", gender);
+    formData.append("bio", bio);
+    formData.append("Technical_skills", JSON.stringify(Technical_skills ?? []));
+    formData.append("otherSkills", JSON.stringify(otherSkills ?? []));
+    formData.append("hobbies", JSON.stringify(hobbies ?? []));
+    mutate(formData);
   };
+
   return (
     <div className="flex justify-center gap-5 mb-4">
       {/* usercard */}
@@ -199,7 +236,21 @@ const EditProfile = () => {
       <form action="#" onSubmit={handleSubmit(handleEditProfile)}>
         <fieldset className="fieldset bg-base-200 border-base-300 rounded-box w-xl border p-4">
           <legend className="fieldset-legend">Edit Profile</legend>
+          {/* Image */}
+          {prevImgURL && (
+            <div className="flex justify-center">
+              <figure className="w-50">
+                <img src={prevImgURL} alt="Shoes" className="rounded-xl w-full" />
+              </figure>
+            </div>
+          )}
+          {/* photo input */}
           <div className="grid grid-cols-2 gap-2">
+            <div className="col-span-2">
+              <label className="label"> Update Photo </label>
+              <input {...register("photo")} type="file" className="file-input w-full" />
+            </div>
+
             {/* email id */}
             <div>
               <label className="label">Email ID</label>
